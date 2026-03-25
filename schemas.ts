@@ -22,4 +22,10 @@ export const technologySchema = z.object({
       }),
     )
     .optional(),
+  owner: z
+    .object({
+      name: z.string(),
+      url: z.string().url().optional(),
+    })
+    .optional(),
 });

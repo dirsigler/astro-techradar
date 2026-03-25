@@ -3,6 +3,7 @@ import { getCollection, render, type CollectionEntry } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import RingBadge from '../../components/RingBadge.astro';
 import MovedIndicator from '../../components/MovedIndicator.astro';
+import { Icon } from 'astro-icon/components';
 import config from 'virtual:techradar/config';
 import type { GetStaticPaths } from 'astro';
 
@@ -57,12 +58,24 @@ const editUrl = config.editBaseUrl
         {entry.data.title}
         <MovedIndicator moved={entry.data.moved} />
       </h1>
-      <div class="mt-3 flex items-center gap-3">
+      <div class="mt-3 flex items-center gap-3 flex-wrap">
         <RingBadge ring={entry.data.ring} />
         <span class="flex items-center gap-1.5 text-sm" style="color: var(--radar-text-muted);">
           <span class="inline-block h-2.5 w-2.5 rounded-full" style={`background-color: ${segmentColor}`}></span>
           {segmentTitle}
         </span>
+        {entry.data.owner && (
+          <span class="flex items-center gap-1.5 text-sm" style="color: var(--radar-text-muted);">
+            <Icon name="lucide:users" class="h-3.5 w-3.5" />
+            {entry.data.owner.url ? (
+              <a href={entry.data.owner.url} target="_blank" rel="noopener noreferrer" class="owner-link">
+                {entry.data.owner.name}
+              </a>
+            ) : (
+              entry.data.owner.name
+            )}
+          </span>
+        )}
       </div>
     </header>
 
@@ -133,6 +146,15 @@ const editUrl = config.editBaseUrl
     transition: color 0.15s;
   }
   .edit-link:hover {
+    color: var(--radar-link);
+  }
+
+  .owner-link {
+    color: var(--radar-text-muted);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+  .owner-link:hover {
     color: var(--radar-link);
   }
 
