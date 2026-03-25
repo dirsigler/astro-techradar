@@ -40,6 +40,12 @@ export function createIntegration(
             'src/pages/technology/[...slug].astro',
           ),
         });
+        if (config.feed) {
+          injectRoute({
+            pattern: `${bp}/feed.xml`,
+            entrypoint: path.join(PKG_DIR, 'src/pages/feed.xml.ts'),
+          });
+        }
         // Resolve theme CSS
         let themeCSS = '';
         const builtinPath = path.join(

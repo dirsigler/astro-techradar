@@ -54,6 +54,9 @@ export interface TechRadarUserConfig {
 
   /** Color mode configuration. */
   color?: ColorModeConfig;
+
+  /** Enable RSS feed at {basePath}/feed.xml. Default: true */
+  feed?: boolean;
 }
 
 export interface ResolvedConfig {
@@ -68,6 +71,7 @@ export interface ResolvedConfig {
   socialLinks: SocialLink[];
   theme: string;
   color: ResolvedColorMode;
+  feed: boolean;
 }
 
 /** Normalize a user-supplied path: ensure leading slash, strip trailing slash. Returns "" for root. */
@@ -96,5 +100,6 @@ export function resolveConfig(user: TechRadarUserConfig): ResolvedConfig {
       toggle: user.color?.toggle ?? true,
       mode: user.color?.mode ?? 'system',
     },
+    feed: user.feed ?? true,
   };
 }

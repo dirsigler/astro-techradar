@@ -34,6 +34,14 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
+    {config.feed && (
+      <link
+        rel="alternate"
+        type="application/rss+xml"
+        title={config.title}
+        href={`${base}feed.xml`}
+      />
+    )}
     <title>{title}</title>
     <style set:html={themeCSS}></style>
     <script is:inline define:vars={{ toggle: config.color.toggle, colorMode: config.color.mode }}>
