@@ -27,6 +27,10 @@ An [Astro](https://astro.build) integration that adds a complete, interactive te
 - **Fully Static & Fast** — Builds to plain HTML/CSS/JS. Deploy anywhere
 - **Movement Indicators** — Mark technologies as moved in/out to highlight recent changes
 - **SEO Ready** — Open Graph, Twitter Cards, canonical URLs, and custom 404 page
+- **RSS Feed** — Auto-generated feed at `{basePath}/feed.xml` for subscribers
+- **Owner Attribution** — Assign teams or individuals to technologies
+- **External Links** — Link technologies to docs, repos, communities with typed icons
+- **Keyboard Navigation** — Arrow keys to cycle radar dots, focus indicators, screen reader friendly
 
 ---
 
@@ -109,6 +113,19 @@ Each technology file:
 title: Kubernetes
 ring: adopt
 moved: 0
+owner:
+  name: Platform Engineering
+  url: https://github.com/orgs/example/teams/platform
+links:
+  - label: Documentation
+    url: https://kubernetes.io/docs/
+    type: docs
+  - label: GitHub
+    url: https://github.com/kubernetes/kubernetes
+    type: repo
+  - label: Kubernetes Slack
+    url: https://kubernetes.slack.com
+    type: community
 history:
   - date: "2025-03"
     ring: adopt
@@ -124,7 +141,28 @@ Your description in Markdown. Explain why this technology is in this ring
 and what your experience has been.
 ```
 
-The `history` field is optional. When present, a timeline is rendered on the technology detail page showing how its ring classification changed over time. Each entry has:
+#### `owner` (optional)
+
+Displays a team or person responsible for this technology on the detail page.
+
+| Field | Required | Description |
+| ----- | -------- | ----------- |
+| `name` | yes | Owner name (e.g. team, guild, or person) |
+| `url` | no | Link to an external resource (GitHub team, Slack channel, wiki page) |
+
+#### `links` (optional)
+
+External resource links displayed inline on the detail page. Links are automatically sorted by type in a consistent order: docs, repo, website, community.
+
+| Field | Required | Description |
+| ----- | -------- | ----------- |
+| `label` | yes | Display text for the link |
+| `url` | yes | Full URL |
+| `type` | no | Link type — determines the icon. One of `docs`, `repo`, `website`, `community`. Defaults to `website` |
+
+#### `history` (optional)
+
+When present, a timeline is rendered on the technology detail page showing how its ring classification changed over time.
 
 | Field | Required | Description |
 | ----- | -------- | ----------- |
@@ -159,6 +197,7 @@ techradar({
     toggle: true, // Show the light/dark mode toggle (default: true)
     mode: "system", // 'light' | 'dark' | 'system' (default: 'system')
   },
+  feed: true, // Enable RSS feed at {basePath}/feed.xml (default: true)
   socialLinks: [
     {
       label: "GitHub",
@@ -185,11 +224,14 @@ socialLinks: [
 
 ### Technology Frontmatter
 
-| Field   | Type                                       | Description                                     |
-| :------ | :----------------------------------------- | :---------------------------------------------- |
-| `title` | `string`                                   | Display name                                    |
-| `ring`  | `'adopt' \| 'trial' \| 'assess' \| 'hold'` | Which ring the technology belongs to            |
-| `moved` | `-1 \| 0 \| 1`                             | Movement indicator (-1 = out, 0 = none, 1 = in) |
+| Field     | Type                                       | Description                                     |
+| :-------- | :----------------------------------------- | :---------------------------------------------- |
+| `title`   | `string`                                   | Display name                                    |
+| `ring`    | `'adopt' \| 'trial' \| 'assess' \| 'hold'` | Which ring the technology belongs to            |
+| `moved`   | `-1 \| 0 \| 1`                             | Movement indicator (-1 = out, 0 = none, 1 = in) |
+| `owner`   | `{ name, url? }`                           | Optional team/person responsible (see [owner](#owner-optional)) |
+| `links`   | `Array<{ label, url, type? }>`             | Optional external links (see [links](#links-optional)) |
+| `history` | `Array<{ date, ring, description? }>`      | Optional ring change timeline (see [history](#history-optional)) |
 
 ### Segment Frontmatter
 
