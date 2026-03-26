@@ -7,8 +7,8 @@
   --radar-bg-secondary: #f8fafc;
   --radar-text: #0f172a;
   --radar-text-secondary: #334155;
-  --radar-text-muted: #64748b;
-  --radar-text-faint: #94a3b8;
+  --radar-text-muted: #475569;     /* slate-600, ~7.4:1 on white */
+  --radar-text-faint: #64748b;     /* slate-500, ~4.8:1 on white */
   --radar-border: #e2e8f0;
   --radar-border-subtle: #cbd5e1;
 
@@ -24,7 +24,7 @@
   --radar-chart-edge: #f8fafc;
   --radar-chart-ring: #cbd5e1;
   --radar-chart-divider: #cbd5e1;
-  --radar-chart-label: #64748b;
+  --radar-chart-label: #475569;
   --radar-chart-band: 15, 23, 42;
   --radar-dot-stroke: #ffffff;
 
@@ -64,16 +64,16 @@
     --radar-bg-secondary: #1e293b;
     --radar-text: #e2e8f0;
     --radar-text-secondary: #cbd5e1;
-    --radar-text-muted: #94a3b8;
-    --radar-text-faint: #94a3b8;
+    --radar-text-muted: #a3b1c1;   /* ~8.3:1 on #0f172a */
+    --radar-text-faint: #94a3b8;   /* ~5.6:1 on #0f172a */
     --radar-border: #334155;
-    --radar-border-subtle: #475569;
+    --radar-border-subtle: #566375; /* brighter for visibility, ~3.5:1 */
 
     /* Interactive */
     --radar-hover-bg: #334155;
     --radar-link: #60a5fa;
-    --radar-active-bg: #3b82f6;
-    --radar-active-text: #0f172a;
+    --radar-active-bg: #2563eb;     /* deeper blue, 5.6:1 with white text */
+    --radar-active-text: #ffffff;
 
     /* Radar SVG */
     --radar-chart-center: #334155;
@@ -81,7 +81,7 @@
     --radar-chart-edge: #0f172a;
     --radar-chart-ring: #475569;
     --radar-chart-divider: #475569;
-    --radar-chart-label: #94a3b8;
+    --radar-chart-label: #a3b1c1;
     --radar-chart-band: 226, 232, 240;
     --radar-dot-stroke: #0f172a;
 
@@ -109,7 +109,7 @@
     --radar-prose-links: #60a5fa;
     --radar-prose-bold: #e2e8f0;
     --radar-prose-code: #a78bfa;
-    --radar-prose-quotes: #94a3b8;
+    --radar-prose-quotes: #a3b1c1;
     --radar-prose-hr: #475569;
   }
 }
@@ -121,16 +121,16 @@
   --radar-bg-secondary: #1e293b;
   --radar-text: #e2e8f0;
   --radar-text-secondary: #cbd5e1;
-  --radar-text-muted: #94a3b8;
+  --radar-text-muted: #a3b1c1;
   --radar-text-faint: #94a3b8;
   --radar-border: #334155;
-  --radar-border-subtle: #475569;
+  --radar-border-subtle: #566375;
 
   /* Interactive */
   --radar-hover-bg: #334155;
   --radar-link: #60a5fa;
-  --radar-active-bg: #3b82f6;
-  --radar-active-text: #0f172a;
+  --radar-active-bg: #2563eb;
+  --radar-active-text: #ffffff;
 
   /* Radar SVG */
   --radar-chart-center: #334155;
@@ -138,7 +138,7 @@
   --radar-chart-edge: #0f172a;
   --radar-chart-ring: #475569;
   --radar-chart-divider: #475569;
-  --radar-chart-label: #94a3b8;
+  --radar-chart-label: #a3b1c1;
   --radar-chart-band: 226, 232, 240;
   --radar-dot-stroke: #0f172a;
 
@@ -166,6 +166,6 @@
   --radar-prose-links: #60a5fa;
   --radar-prose-bold: #e2e8f0;
   --radar-prose-code: #a78bfa;
-  --radar-prose-quotes: #94a3b8;
+  --radar-prose-quotes: #a3b1c1;
   --radar-prose-hr: #475569;
 }
