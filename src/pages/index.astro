@@ -53,8 +53,6 @@ const legendSegments = segments.map((s) => ({
 
 const ringEntries = Object.entries(RING_LABELS) as [string, string][];
 
-// Collect all unique tags across technologies
-const allTags = [...new Set(technologies.flatMap((t) => t.tags))].sort();
 ---
 
 <Base title={config.name}>
@@ -66,6 +64,17 @@ const allTags = [...new Set(technologies.flatMap((t) => t.tags))].sort();
       </p>
     )}
   </div>
+
+  {config.search.enabled && (
+    <input
+      type="search"
+      id="radar-search"
+      placeholder={config.search.placeholder}
+      autocomplete="off"
+      class="search-input"
+      slot="nav-end"
+    />
+  )}
 
   <!-- Filter bar -->
   <div id="filter-bar" class="mb-8 flex flex-col items-center gap-3">
@@ -85,15 +94,6 @@ const allTags = [...new Set(technologies.flatMap((t) => t.tags))].sort();
         </button>
       ))}
     </div>
-    {allTags.length > 0 && (
-      <div class="flex flex-wrap items-center justify-center gap-2">
-        {allTags.map((tag) => (
-          <button data-filter={tag} data-type="tag" class="filter-btn filter-btn-tag">
-            {tag}
-          </button>
-        ))}
-      </div>
-    )}
   </div>
 
   <Radar technologies={technologies} segments={segments} />
@@ -129,10 +129,7 @@ const allTags = [...new Set(technologies.flatMap((t) => t.tags))].sort();
     border-color: var(--radar-border-subtle);
     color: var(--radar-text);
   }
-  .filter-btn-tag {
-    font-size: 0.8125rem;
-  }
-  .filter-btn.active {
+.filter-btn.active {
     background-color: var(--radar-active-bg);
     border-color: var(--radar-active-bg);
     color: var(--radar-active-text);
@@ -180,20 +177,73 @@ const allTags = [...new Set(technologies.flatMap((t) => t.tags))].sort();
   const dots = document.querySelectorAll<SVGCircleElement>('.radar-dot');
   const legendRows = document.querySelectorAll<HTMLElement>('.legend-row');
 
+  const searchInput = document.getElementById('radar-search') as HTMLInputElement | null;
+
+  function filterDot(dot: SVGCircleElement, visible: boolean) {
+    const link = dot.closest('a') as SVGAElement | null;
+    if (!link) return;
+    link.style.opacity = visible ? '1' : '0.1';
+    link.style.pointerEvents = visible ? 'auto' : 'none';
+    link.setAttribute('tabindex', visible ? '0' : '-1');
+  }
+
+  function filterRow(row: HTMLElement, visible: boolean) {
+    row.style.opacity = visible ? '1' : '0.15';
+    row.style.pointerEvents = visible ? 'auto' : 'none';
+    row.setAttribute('tabindex', visible ? '0' : '-1');
+  }
+
+  function applySearch(query: string) {
+    const q = query.toLowerCase().trim();
+
+    buttons.forEach((b) => b.classList.remove('active'));
+    document.querySelector('[data-filter="all"]')?.classList.add('active');
+
+    dots.forEach((dot) => {
+      const title = (dot.getAttribute('data-title') ?? '').toLowerCase();
+      const segment = (dot.getAttribute('data-segment') ?? '').toLowerCase();
+      const ring = (dot.getAttribute('data-ring') ?? '').toLowerCase();
+      const tags = (dot.getAttribute('data-tags') ?? '').toLowerCase();
+      filterDot(dot, !q || title.includes(q) || segment.includes(q) || ring.includes(q) || tags.includes(q));
+    });
+
+    legendRows.forEach((row) => {
+      const title = (row.querySelector('.legend-title')?.textContent ?? '').toLowerCase();
+      const segment = (row.dataset.segment ?? '').toLowerCase();
+      const ring = (row.dataset.ring ?? '').toLowerCase();
+      const tags = (row.dataset.tags ?? '').toLowerCase();
+      filterRow(row, !q || title.includes(q) || segment.includes(q) || ring.includes(q) || tags.includes(q));
+    });
+  }
+
+  searchInput?.addEventListener('input', () => applySearch(searchInput!.value));
+
+  const allBtn = document.querySelector<HTMLButtonElement>('[data-filter="all"]')!;
+
+  function resetAll() {
+    buttons.forEach((b) => b.classList.remove('active'));
+    allBtn.classList.add('active');
+    dots.forEach((dot) => filterDot(dot, true));
+    legendRows.forEach((row) => filterRow(row, true));
+  }
+
   buttons.forEach((btn) => {
     btn.addEventListener('click', () => {
-      // Update active state
+      if (searchInput) searchInput.value = '';
+
+      // Toggle off if already active (unless it's the "All" button)
+      if (btn.classList.contains('active') && btn.dataset.filter !== 'all') {
+        resetAll();
+        return;
+      }
+
       buttons.forEach((b) => b.classList.remove('active'));
       btn.classList.add('active');
 
       const filter = btn.dataset.filter!;
       const type = btn.dataset.type!;
 
-      // Filter radar dots
       dots.forEach((dot) => {
-        const link = dot.closest('a') as SVGAElement | null;
-        if (!link) return;
-
         const segment = dot.getAttribute('data-segment') ?? '';
         const ring = dot.getAttribute('data-ring') ?? '';
         const tags = (dot.getAttribute('data-tags') ?? '').split(',').filter(Boolean);
@@ -203,14 +253,9 @@ const allTags = [...new Set(technologies.flatMap((t) => t.tags))].sort();
         else if (type === 'ring') visible = ring === filter;
         else if (type === 'tag') visible = tags.includes(filter);
 
-        // Fade non-matching dots instead of hiding
-        link.style.opacity = visible ? '1' : '0.1';
-        link.style.pointerEvents = visible ? 'auto' : 'none';
-        // Remove filtered dots from tab order
-        link.setAttribute('tabindex', visible ? '0' : '-1');
+        filterDot(dot, visible);
       });
 
-      // Filter legend rows
       legendRows.forEach((row) => {
         const segment = row.dataset.segment ?? '';
         const ring = row.dataset.ring ?? '';
@@ -221,17 +266,19 @@ const allTags = [...new Set(technologies.flatMap((t) => t.tags))].sort();
         else if (type === 'ring') visible = ring === filter;
         else if (type === 'tag') visible = tags.includes(filter);
 
-        row.style.opacity = visible ? '1' : '0.15';
-        row.style.pointerEvents = visible ? 'auto' : 'none';
-        // Remove filtered legend rows from tab order
-        row.setAttribute('tabindex', visible ? '0' : '-1');
+        filterRow(row, visible);
       });
     });
   });
 
-  // Activate tag filter from URL query parameter (e.g. ?tag=cloud-native)
-  const urlTag = new URLSearchParams(window.location.search).get('tag');
-  if (urlTag) {
+  // Activate filter from URL query parameters
+  const params = new URLSearchParams(window.location.search);
+  const urlQuery = params.get('q');
+  const urlTag = params.get('tag');
+  if (urlQuery && searchInput) {
+    searchInput.value = urlQuery;
+    applySearch(urlQuery);
+  } else if (urlTag) {
     const tagBtn = Array.from(buttons).find(
       (b) => b.dataset.type === 'tag' && b.dataset.filter === urlTag,
     );

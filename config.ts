@@ -5,6 +5,30 @@ export interface SocialLink {
   icon?: string;
 }
 
+export interface EditConfig {
+  /** Show "Edit this page" links on technology pages. Default: true */
+  enabled?: boolean;
+  /** Base URL for edit links (e.g. "https://github.com/org/repo/edit/main/segments"). */
+  baseUrl?: string;
+}
+
+export interface ResolvedEdit {
+  enabled: boolean;
+  baseUrl?: string;
+}
+
+export interface SearchConfig {
+  /** Enable the search input in the navbar. Default: true */
+  enabled?: boolean;
+  /** Placeholder text for the search input. Default: 'Search technologies...' */
+  placeholder?: string;
+}
+
+export interface ResolvedSearch {
+  enabled: boolean;
+  placeholder: string;
+}
+
 export interface ColorModeConfig {
   /** Show the light/dark mode toggle in the header. Default: true */
   toggle?: boolean;
@@ -38,13 +62,10 @@ export interface TechRadarUserConfig {
   logo?: string;
 
   /** Footer text. Supports simple HTML. */
-  footerText?: string;
+  footer?: string;
 
-  /** Show "Edit this page" links on technology pages. Default: true */
-  allowEditing?: boolean;
-
-  /** Base URL for "Edit" links on technology pages (e.g. "https://github.com/org/repo/edit/main/segments"). */
-  editBaseUrl?: string;
+  /** Edit page configuration. */
+  editing?: EditConfig;
 
   /** Social links shown in the footer. */
   socialLinks?: SocialLink[];
@@ -57,6 +78,9 @@ export interface TechRadarUserConfig {
 
   /** Enable RSS feed at {basePath}/feed.xml. Default: true */
   feed?: boolean;
+
+  /** Search configuration. */
+  search?: SearchConfig;
 }
 
 export interface ResolvedConfig {
@@ -66,12 +90,13 @@ export interface ResolvedConfig {
   /** Normalized base path with leading slash, no trailing slash. Empty string when mounted at root. */
   basePath: string;
   logo?: string;
-  footerText: string;
-  editBaseUrl?: string;
+  footer: string;
+  editing: ResolvedEdit;
   socialLinks: SocialLink[];
   theme: string;
   color: ResolvedColorMode;
   feed: boolean;
+  search: ResolvedSearch;
 }
 
 /** Normalize a user-supplied path: ensure leading slash, strip trailing slash. Returns "" for root. */
@@ -89,11 +114,11 @@ export function resolveConfig(user: TechRadarUserConfig): ResolvedConfig {
     subtitle: user.subtitle,
     basePath: normalizeBasePath(user.basePath),
     logo: user.logo,
-    footerText: user.footerText ?? '',
-    editBaseUrl:
-      (user.allowEditing ?? true) === false
-        ? undefined
-        : user.editBaseUrl,
+    footer: user.footer ?? '',
+    editing: {
+      enabled: user.editing?.enabled ?? true,
+      baseUrl: (user.editing?.enabled ?? true) ? user.editing?.baseUrl : undefined,
+    },
     socialLinks: user.socialLinks ?? [],
     theme: user.theme ?? 'default',
     color: {
@@ -101,5 +126,9 @@ export function resolveConfig(user: TechRadarUserConfig): ResolvedConfig {
       mode: user.color?.mode ?? 'system',
     },
     feed: user.feed ?? true,
+    search: {
+      enabled: user.search?.enabled ?? true,
+      placeholder: user.search?.placeholder ?? 'Search technologies...',
+    },
   };
 }

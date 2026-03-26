@@ -75,7 +75,10 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
           )}
           {config.name}
         </a>
-        {config.color.toggle && <ThemeToggle />}
+        <div class="flex items-center gap-3">
+          <slot name="nav-end" />
+          {config.color.toggle && <ThemeToggle />}
+        </div>
       </nav>
     </header>
 
@@ -90,7 +93,7 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
             &copy; <a href="https://github.com/dirsigler/techradar" target="_blank" rel="noopener noreferrer" class="footer-link">Dennis Irsigler</a>
             &nbsp;&middot;&nbsp;
             <a href="https://github.com/dirsigler/techradar/blob/main/LICENSE" target="_blank" rel="noopener noreferrer" class="footer-link">MIT License</a>
-            {config.footerText && <Fragment>&nbsp;&middot;&nbsp;<span set:html={config.footerText} /></Fragment>}
+            {config.footer && <Fragment>&nbsp;&middot;&nbsp;<span set:html={config.footer} /></Fragment>}
           </span>
 
           {config.socialLinks && config.socialLinks.length > 0 && (
@@ -153,5 +156,24 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
   }
   .social-link:hover {
     color: var(--radar-text);
+  }
+
+  :global(.search-input) {
+    width: 12rem;
+    height: calc(1.25rem + 1rem + 2px); /* match toggle: icon 1.25rem + padding 0.5rem*2 + border 1px*2 */
+    padding: 0 0.625rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--radar-border);
+    background-color: transparent;
+    color: var(--radar-text);
+    font-size: 0.8125rem;
+    outline: none;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  :global(.search-input)::placeholder {
+    color: var(--radar-text-faint);
+  }
+  :global(.search-input):focus {
+    border-color: var(--radar-active-bg);
   }
 </style>
