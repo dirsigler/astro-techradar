@@ -66,14 +66,16 @@ const ringEntries = Object.entries(RING_LABELS) as [string, string][];
   </div>
 
   {config.search.enabled && (
-    <input
-      type="search"
-      id="radar-search"
-      placeholder={config.search.placeholder}
-      autocomplete="off"
-      class="search-input"
-      slot="nav-end"
-    />
+    <div class="search-wrapper" slot="nav-end">
+      <input
+        type="search"
+        id="radar-search"
+        placeholder={config.search.placeholder}
+        autocomplete="off"
+        class="search-input"
+      />
+      <kbd class="search-kbd" id="search-kbd">⌘K</kbd>
+    </div>
   )}
 
   <!-- Filter bar -->
@@ -270,6 +272,37 @@ const ringEntries = Object.entries(RING_LABELS) as [string, string][];
       });
     });
   });
+
+  // Cmd+K / Ctrl+K to focus search, Escape to blur
+  const searchKbd = document.getElementById('search-kbd');
+
+  if (searchInput) {
+    document.addEventListener('keydown', (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        searchInput.focus();
+      }
+    });
+
+    searchInput.addEventListener('focus', () => {
+      if (searchKbd) searchKbd.style.display = 'none';
+    });
+
+    searchInput.addEventListener('blur', () => {
+      if (searchKbd && !searchInput.value) searchKbd.style.display = '';
+    });
+
+    searchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        searchInput.blur();
+      }
+    });
+
+    // Show Ctrl+K on non-Mac platforms
+    if (searchKbd && !/Mac|iPhone|iPad/.test(navigator.userAgent)) {
+      searchKbd.textContent = 'Ctrl K';
+    }
+  }
 
   // Activate filter from URL query parameters
   const params = new URLSearchParams(window.location.search);

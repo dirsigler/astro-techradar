@@ -1,6 +1,6 @@
 {
   "name": "@dirsigler/astro-techradar",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "type": "module",
   "description": "An interactive technology radar Astro integration — track technology adoption across your organization",
   "license": "MIT",
@@ -48,8 +48,8 @@
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.5.19",
-    "@tailwindcss/vite": "^4.2.1",
+    "@tailwindcss/vite": "~4.1.0",
     "astro-icon": "^1.1.5",
-    "tailwindcss": "^4.2.1"
+    "tailwindcss": "~4.1.0"
   }
 }
