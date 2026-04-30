@@ -48,7 +48,7 @@
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.5.19",
-    "@tailwindcss/vite": "~4.1.0",
+    "@tailwindcss/vite": "~4.2.4",
     "astro-icon": "^1.1.5",
     "tailwindcss": "~4.1.0"
   }
