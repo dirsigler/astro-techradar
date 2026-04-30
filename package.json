@@ -50,6 +50,6 @@
     "@tailwindcss/typography": "^0.5.19",
     "@tailwindcss/vite": "~4.1.0",
     "astro-icon": "^1.1.5",
-    "tailwindcss": "~4.1.0"
+    "tailwindcss": "~4.2.4"
   }
 }
