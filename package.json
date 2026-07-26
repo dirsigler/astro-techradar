@@ -36,20 +36,21 @@
   },
   "peerDependencies": {
     "@iconify-json/lucide": "^1.2.98",
-    "astro": "^6.0.0"
+    "astro": "^7.0.0"
   },
   "peerDependenciesMeta": {
     "@iconify-json/lucide": {
       "optional": true
     }
   },
-  "overrides": {
-    "h3": ">=1.15.9"
-  },
   "dependencies": {
-    "@tailwindcss/typography": "^0.5.19",
-    "@tailwindcss/vite": "~4.1.0",
+    "@tailwindcss/typography": "^0.5.20",
+    "@tailwindcss/vite": "~4.3.0",
     "astro-icon": "^1.1.5",
-    "tailwindcss": "~4.2.4"
+    "tailwindcss": "~4.3.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.9",
+    "typescript": "^6.0.3"
   }
 }

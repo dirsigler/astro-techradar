@@ -15,7 +15,7 @@ export async function GET(context: APIContext) {
   const site = context.site?.toString().replace(/\/+$/, '') ?? 'https://example.com';
   const technologies = await getCollection('technologies');
 
-  const items = technologies.map((entry) => {
+  const items = technologies.map((entry: any) => {
     const ring = entry.data.ring.charAt(0).toUpperCase() + entry.data.ring.slice(1);
 
     let pubDate = '';

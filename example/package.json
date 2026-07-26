@@ -1,0 +1,17 @@
+{
+  "name": "astro-techradar-demo",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/rss": "^4.0.17",
+    "@astrojs/sitemap": "^3.7.1",
+    "@dirsigler/astro-techradar": "file:..",
+    "@iconify-json/lucide": "^1.2.98",
+    "astro": "^7.0.0"
+  }
+}
