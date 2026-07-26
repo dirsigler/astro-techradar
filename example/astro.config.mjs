@@ -47,16 +47,16 @@ export default defineConfig({
 
       // Edit page configuration
       editing: {
-        enabled: true, // Show "Edit this page" links on technology pages (default: true)
+        enabled: false, // Show "Edit this page" links on technology pages (default: true)
         baseUrl:
-          "https://github.com/dirsigler/astro-techradar-demo/edit/main/segments",
+          "https://github.com/dirsigler/astro-techradar/edit/main/segments",
       },
 
       // Social links shown in the footer
       socialLinks: [
         {
           label: "GitHub",
-          href: "https://github.com/dirsigler/astro-techradar-demo",
+          href: "https://github.com/dirsigler/astro-techradar",
           icon: "github", // Lucide icon name (requires @iconify-json/lucide)
         },
       ],
